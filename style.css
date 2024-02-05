@@ -1,0 +1,16 @@
+body {
+    background-color: #000000;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.Entry {
+    color: rgb(255, 255, 255);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    text-align: center;
+}
