@@ -17,13 +17,13 @@ body {
     font-family: "Montserrat", sans-serif;
     font-size: 30px;
     animation: fadeOut 2s ease-in-out;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
     }
-    @keyframes fadeOut {
-        0% {
-            opacity: 1;
-        }
-        100% {
-            opacity: 0;
-        }
+    100% {
+        opacity: 0;
     }
-    
+}
