@@ -7,19 +7,33 @@
     <title>Enzyme Kinetics</title>
 </head>
 <body>
-    <div class="Entry">
-        <div>Enzyme Kinetics</div>
-    </div>   
+    <!--
+        <div class="Entry">
+            <div>Enzyme Kinetics</div>
+        </div>   
+    -->
 
     <img src="EnzymesLogo.PNG" width="240" height="135" alt="logo">
 
+    <br>
+    <h3>Graph name:</h3>
+    <input type="text" id="g" name="g">
+
+    <br>
+    <h3>X-Axis name:</h3>
+    <input type="text" id="x1" name="x1">
+
+    <br>
+    <h3>Y-Axis name:</h3>
+    <input type="text" id="y1" name="y1"><br><br>
+    
     <label for="x-units">Select an Unit for X:</label>
     <select name="x-units" id="x-units">
-        <option value="firstXOption">A</option>
-        <option value="secondXOption">B</option>
-        <option value="thirdXOption">C</option>
-        <option value="fourthXOption">D</option>
-    </select>
+        <option value="firstXOption">M</option>
+        <option value="secondXOption">mM</option>
+        <option value="thirdXOption">µM</option>
+        <option value="fourthXOption">nM</option>
+    </select><br><br>
 
     <label for="y-units">Select an Unit for Y:</label>
     <select name="y-units" id="y-units">
@@ -27,19 +41,15 @@
         <option value="secondYOption">B</option>
         <option value="thirdYOption">C</option>
         <option value="fourthYOption">D</option>
-    </select>
-    <br>
-    <h3>Graph name:</h3>
-    <input type="text" id="g" name="g">
-    
-    <br>
-    <h3>X-Axis name:</h3>
-    <input type="text" id="x1" name="x1">
-    
-    <br>
-    <h3>Y-Axis name:</h3>
-    <input type="text" id="y1" name="y1">
-    
+    </select><br><br>
+
+    <label for="numPairs">Enter the number of pairs:</label>
+    <input type="number" id="numPairs" min="0"><br><br>
+
+    <div id="inputFields"></div>
+
+    <script src="script.js"></script>
+
     <br>
     <input type="submit" value="Generate Graph">
 </body>
