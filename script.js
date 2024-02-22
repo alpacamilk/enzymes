@@ -20,3 +20,17 @@ document.getElementById('numPairs').addEventListener('input', function() {
 
     document.getElementById('inputFields').innerHTML = inputFields;
 });
+
+function generate() {
+    var numPairs = parseInt(document.getElementById('numPairs').value);
+    var results = 0;
+
+    for (var i = 1; i <= numPairs; i++) {
+        var x = parseFloat(document.getElementById('xInput' + i).value);
+        var y = parseFloat(document.getElementById('yInput' + i).value);
+        
+        results += x + y;
+    }
+
+    document.getElementById('resultFields').innerHTML = "Result: " + results;
+}
