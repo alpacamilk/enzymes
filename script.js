@@ -26,7 +26,7 @@ function generate() {
     var results = 0;
     var xInput = document.getElementById("x1").value;
     var yInput = document.getElementById("y1").value;
-    var gInput = document.getElementById("g1").value;
+    var gInput = document.getElementById("g").value;
 
     for (var i = 1; i <= numPairs; i++) {
         var x = parseFloat(document.getElementById('xInput' + i).value);
