@@ -26,6 +26,7 @@ function generate() {
     var results = 0;
     var xInput = document.getElementById("x1").value;
     var yInput = document.getElementById("y1").value;
+    var gInput = document.getElementById("g").value;
 
     for (var i = 1; i <= numPairs; i++) {
         var x = parseFloat(document.getElementById('xInput' + i).value);
@@ -35,6 +36,8 @@ function generate() {
     }
 
     document.getElementById('resultFields').innerHTML = "Result: " + results;
+    document.getElementById('gName;).innerHTML = "Graph Name: " + gInput;
     document.getElementById('xName').innerHTML = "X-Axis Name: " + xInput;
     document.getElementById('yName').innerHTML = "Y-Axis Name: " + yInput;
+    
 }
