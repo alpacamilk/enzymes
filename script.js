@@ -36,7 +36,7 @@ function generate() {
     }
 
     document.getElementById('resultFields').innerHTML = "Result: " + results;
-    document.getElementById('gName;).innerHTML = "Graph Name: " + gInput;
+    document.getElementById('gName').innerHTML = "Graph Name: " + gInput;
     document.getElementById('xName').innerHTML = "X-Axis Name: " + xInput;
     document.getElementById('yName').innerHTML = "Y-Axis Name: " + yInput;
 }
