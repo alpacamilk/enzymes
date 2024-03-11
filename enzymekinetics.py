@@ -36,8 +36,7 @@ def model(x, Vm, Km):
 
 
 
-y = model(x, 0.7, 0.5)
-
+y=np.array([5.14E-06, 1.06E-05, 1.64E-05, 2.25E-05, 2.90E-05, 3.21E-05, 3.44E-05])
 
 
 initialGuess = [1,1]
