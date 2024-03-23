@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Enzyme Kinetics</title>
+
+   <link rel="stylesheet" href="{{ url_for('static', filename='style/style.css') }}">
+   <img src="{{ url_for('static', filename='images/EnzymesLogo.PNG')}}" width="240" height="135" alt="logo">
+</head>
+<body>
+   <form id="form" action="/" method="post">
+        <h3>Graph name:</h3>
+        <input type="text" id="g" name="g">
+
+        <br>
+        <h3>X-Axis name:</h3>
+        <input type="text" id="x1" name="x1">
+
+        <br>
+        <h3>Y-Axis name:</h3>
+        <input type="text" id="y1" name="y1"><br><br>
+        
+        <label for="x-units">Select an Unit for X:</label>
+        <select name="x-units" id="x-units">
+            <option value="firstXOption">M</option>
+            <option value="secondXOption">mM</option>
+            <option value="thirdXOption">µM</option>
+            <option value="fourthXOption">nM</option>
+        </select><br><br>
+    
+        <label for="y-units">Select an Unit for Y:</label>
+        <select name="y-units" id="y-units">
+            <option value="firstYOption">A</option>
+            <option value="secondYOption">B</option>
+            <option value="thirdYOption">C</option>
+            <option value="fourthYOption">D</option>
+        </select><br><br>
+
+        <label for="numPairs">Enter the number of pairs:</label>
+        <input type="number" id="numPairs" name="numPairs" min="0"><br><br>
+
+        <div id="inputFields"></div>
+
+    
+        <input type="submit" value="Submit">
+   </form>
+
+
+   <script>
+    document.getElementById("numPairs").addEventListener("input", function() {
+    var numPairs = parseInt(this.value);
+    var inputFields = '';
+    var maxPairs = 100;
+
+    if (numPairs > maxPairs) {
+        alert(`Please enter a number less than or equal to ${maxPairs}`);
+        this.value = maxPairs;
+        numPairs = maxPairs;
+    }
+
+    for (var i = 0; i < numPairs; i++) {
+        inputFields += `
+            <label for="x_values">x:</label>
+            <input type="text" class="x_values" name="x_values[]">
+            <label for="y_values">y:</label>
+            <input type="text" class="y_values" name="y_values[]"><br>
+        `;
+    }
+
+    document.getElementById('inputFields').innerHTML = inputFields;
+});
+   </script>
+   
+   <div>
+       {{ plot|safe }}
+   </div>
+
+</body>
+</html>
