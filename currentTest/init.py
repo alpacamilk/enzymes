@@ -25,8 +25,10 @@ def index():
         # Assuming user inputs the same number of x and y values
         n = len(x_values)
         
-        
+        # Assuming x units are always in M
         x = np.array(x_values)
+        
+        # Assuming y units are always in A
         y = np.array(y_values)
 
         ##The following variables all affect the visuals of the graph output:
@@ -105,7 +107,9 @@ def index():
             title=dict(text=g_name, font=dict(size=50), yref='paper',x=0.5),
             xaxis=dict(title=x_name, gridcolor='black'),
             yaxis=dict(title=y_name, gridcolor='black'),
-            legend_title=dict(text="Legend")
+            legend_title=dict(text="Legend"),
+            plot_bgcolor='white',
+            paper_bgcolor='white'
         )
 
         combinedFig.add_annotation(x=x[0], y=y[0],
@@ -134,6 +138,3 @@ app.secret_key = 'some key that you will never guess'
 #Run the app on localhost port 5000
 if __name__ == "__main__":
    app.run('127.0.0.1', 5000, debug = True)
-
-
-
