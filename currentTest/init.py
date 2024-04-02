@@ -128,8 +128,6 @@ def index():
                     size=20,
                     ))
         
-        combinedFig.update_yaxes(range=[0, 10])  # Set the range for the y-axis here
-        combinedFig.update_xaxes(range=[0, 10])
         return render_template('index.html', plot=combinedFig.to_html())
    else:
         return render_template('index.html', plot='')
