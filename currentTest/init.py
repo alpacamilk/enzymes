@@ -105,8 +105,8 @@ def index():
 
         combinedFig.update_layout(
             title=dict(text=g_name, font=dict(size=50), yref='paper',x=0.5),
-            xaxis=dict(title=x_name, gridcolor='black'),
-            yaxis=dict(title=y_name, gridcolor='black'),
+            xaxis=dict(title=x_name, gridcolor='black', autorange=True),
+            yaxis=dict(title=y_name, gridcolor='black', autorange=True), 
             legend_title=dict(text="Legend"),
             plot_bgcolor='white',
             paper_bgcolor='white'
@@ -128,6 +128,19 @@ def index():
                     size=20,
                     ))
         
+        miny = min(y)
+        maxy = max(y)
+
+        if miny >= 0 and maxy >= 0:
+            y_range = [0, maxy]
+        elif miny <= 0 and maxy <= 0:
+            y_range = [miny, 0]
+        else:
+            y_range = [miny, maxy]
+
+        combinedFig.update_yaxes(range=y_range)
+        
+
         return render_template('index.html', plot=combinedFig.to_html())
    else:
         return render_template('index.html', plot='')
