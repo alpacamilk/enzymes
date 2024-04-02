@@ -40,8 +40,8 @@ def index():
         legendTitleFontColor="black"
 
         ##sets the colors of the input scatter points and the curve
-        inputColor = "Blue"
-        curveColor = "Green"
+        inputColor = request.form.get('input-color')
+        curveColor = request.form.get('curve-color')
 
         sd=0.1
 
@@ -127,6 +127,9 @@ def index():
                     family=fontFamily,
                     size=20,
                     ))
+        
+        combinedFig.update_yaxes(range=[0, 10])  # Set the range for the y-axis here
+        combinedFig.update_xaxes(range=[0, 10])
         return render_template('index.html', plot=combinedFig.to_html())
    else:
         return render_template('index.html', plot='')
@@ -138,3 +141,6 @@ app.secret_key = 'some key that you will never guess'
 #Run the app on localhost port 5000
 if __name__ == "__main__":
    app.run('127.0.0.1', 5000, debug = True)
+
+
+
