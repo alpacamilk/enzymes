@@ -1,3 +1,20 @@
 body {
     background-color: lightgray;
 }
+#plot {
+    width: 60%; 
+    margin-top: -650px; /* Adjust the negative top margin to position it up */
+    margin-left: 450px;
+    padding: 10px;
+    background-color: #8f8c8c; /* Background color of the container */
+    border-radius: 5px; /* Rounded corners */
+}
+#values {
+    width: 60%; 
+    margin-top: -200px; /* Adjust the negative top margin to position it up */
+    margin-left: 450px;
+    padding: 10px;
+    background-color: #8f8c8c; /* Background color of the container */
+    border-radius: 5px; /* Rounded corners */
+}
+
