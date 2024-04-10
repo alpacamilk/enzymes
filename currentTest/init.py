@@ -106,7 +106,7 @@ def index():
         combinedFig.update_layout(
             title=dict(text=g_name, font=dict(size=50), yref='paper',x=0.5),
             xaxis=dict(title=x_name, gridcolor='black', autorange=True),
-            yaxis=dict(title=y_name, gridcolor='black', autorange=True), 
+            yaxis=dict(title=y_name, gridcolor='black', autorange=True),  
             legend_title=dict(text="Legend"),
             plot_bgcolor='white',
             paper_bgcolor='white'
@@ -115,7 +115,7 @@ def index():
         combinedFig.add_annotation(x=x[0], y=y[0],
                     text=("vMax: " + str(round(vM_guess,10))),
                     showarrow=False,
-                    yshift=10, xshift = 150, font=dict(
+                    yshift=50, xshift = 150, font=dict(
                     family=fontFamily,
                     size=20,
                     ))
@@ -123,7 +123,7 @@ def index():
         combinedFig.add_annotation(x=x[0], y=y[0],
                     text=("kM: " + str(round(kM_guess,10))),
                     showarrow=False,
-                    yshift=30, xshift = 150, font=dict(
+                    yshift=70, xshift = 150, font=dict(
                     family=fontFamily,
                     size=20,
                     ))
@@ -140,10 +140,17 @@ def index():
 
         combinedFig.update_yaxes(range=y_range)
         
-
-        return render_template('index.html', plot=combinedFig.to_html())
+        return render_template('index.html', plot=combinedFig.to_html(), vMax = str(round(vM_guess,10)), kM = str(round(kM_guess,10)))
    else:
-        return render_template('index.html', plot='')
+        blank_plot = go.Figure()
+        blank_plot.update_layout(
+        title=dict(text='Graph Name', font=dict(size=50), yref='paper',x=0.5),
+        xaxis=dict(title='X-axis Name', gridcolor='black', range=[0, 10]),
+        yaxis=dict(title='Y-axis Name', gridcolor='black', range=[0, 10]),
+        plot_bgcolor='white',
+        paper_bgcolor='white'
+        )
+        return render_template('index.html', plot=blank_plot.to_html())
    
    
 
