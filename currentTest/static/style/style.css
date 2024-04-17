@@ -1,20 +1,102 @@
 body {
-    background-color: lightgray;
+    background-color: #1e1e1e;
+}
+form {
+    margin: 20px; /* Center the form horizontally */
+    margin-top: -20px;
+    width: 20%;
+    padding: 10px;
+    background-color: #4e4e4e; /* Background color of the container */
+    border-radius: 10px; /* Rounded corners */
+    text-align: center; /* Center the text and inputs */
+    color: white;
+    max-height: 485px; /* Maximum height for the form */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+input[type="submit"] {
+    background-color: #2c5ca0; /* blue background color */
+    color: white; /* White text color */
+    padding: 10px 20px; /* Padding */
+    margin: 8px 0; /* Margin */
+    border: none; /* No border */
+    cursor: pointer; /* Pointer cursor */
+    border-radius: 5px; /* Rounded corners */
+    width: 60%; /* Full width */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Adjust the shadow properties as needed */
+}
+#inputFields {
+    margin-top: 20px; /* Add some space between the form and the input fields */
+    text-align: center; /* Center the text and inputs */
+}
+
+/* Style for each input pair */
+.x_values, .y_values {
+    width: 30%;
+    margin-bottom: 10px; /* Add some space between input pairs */
+}
+/* Style for X and Y unit selection elements */
+#x-units, #y-units {
+    width: 20%; /* Set the width of each unit selection to 50% */
+
+}
+/* Style for point color and curve color input fields */
+#input-color, #curve-color {
+    width: 20%; /* Set the width of each color input field to 50% */
+    margin-bottom: 10px; /* Add some space between color input fields */
+}
+.logo-img {
+    margin: 20px; /* Center the logo horizontally */
+    width: 305px;
+    height: 105px;
+    border-radius: 10px; /* Adjust the radius as needed */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Adjust the shadow properties as needed */
+    background-color: #4e4e4e;
 }
 #plot {
     width: 60%; 
-    margin-top: -650px; /* Adjust the negative top margin to position it up */
-    margin-left: 450px;
+    margin-top: -631px; /* Adjust the negative top margin to position it up */
+    margin-left: 330px;
     padding: 10px;
-    background-color: #8f8c8c; /* Background color of the container */
-    border-radius: 5px; /* Rounded corners */
+    background-color: #4e4e4e; /* Background color of the container */
+    border-radius: 10px; /* Rounded corners */
+    color: white;
 }
-#values {
-    width: 60%; 
-    margin-top: -200px; /* Adjust the negative top margin to position it up */
-    margin-left: 450px;
+#kM {
+    width: 5%; 
+    margin-top: -120px; /* Adjust the negative top margin to position it up */
+    margin-left: 330px;
     padding: 10px;
-    background-color: #8f8c8c; /* Background color of the container */
-    border-radius: 5px; /* Rounded corners */
+    background-color: #4e4e4e; /* Background color of the container */
+    border-radius: 10px; /* Rounded corners */
+    color: white;
+    text-align: center;
+}
+#vMax {
+    width: 5%; 
+    margin-top: -70px; /* Adjust the negative top margin to position it up */
+    margin-left: 330px;
+    padding: 10px;
+    background-color: #4e4e4e; /* Background color of the container */
+    border-radius: 10px; /* Rounded corners */
+    color: white;
+    text-align: center;
+}
+#kMVal {
+    width: 52.28%; 
+    margin-top: -72px; /* Adjust the negative top margin to position it up */
+    margin-left: 440px;
+    padding: 10px;
+    background-color: #4e4e4e; /* Background color of the container */
+    border-radius: 10px; /* Rounded corners */
+    color: white;
+}
+#vMaxVal{
+    width: 52.28%; 
+    margin-top: -15px; /* Adjust the negative top margin to position it up */
+    margin-left: 440px;
+    padding: 10px;
+    background-color: #4e4e4e; /* Background color of the container */
+    border-radius: 10px; /* Rounded corners */
+    color: white;
 }
 
