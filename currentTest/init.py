@@ -12,15 +12,23 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def index():
    if request.method == 'POST':
+        
+        x_units = request.form.get('x-units')
+        y_units = request.form.get('y-units')
+        units_per = request.form.get('units-per')
+
+        # Retrieve the user input for graph name, x-axis name, and y-axis name
         g_name = request.form.get('g')
         x_name = request.form.get('x1')
         y_name = request.form.get('y1')
-        
-        # Retrieve user input for x values
-        x_values = list(map(float, request.form.getlist('x_values[]')))
-        
-        # Retrieve user input for y values
-        y_values = list(map(float, request.form.getlist('y_values[]')))
+
+
+        # Retrieve user input for number of pairs
+        num_pairs = int(request.form.get('numPairs'))
+
+        # Retrieve user input for x and y values
+        x_values = [float(request.form.getlist('x_values[]')[i]) for i in range(num_pairs)]
+        y_values = [float(request.form.getlist('y_values[]')[i]) for i in range(num_pairs)]
         
         # Assuming user inputs the same number of x and y values
         n = len(x_values)
@@ -140,7 +148,7 @@ def index():
 
         combinedFig.update_yaxes(range=y_range)
         
-        return render_template('index.html', plot=combinedFig.to_html(), vMax = str(round(vM_guess,10)), kM = str(round(kM_guess,10)))
+        return render_template('index.html', plot=combinedFig.to_html(), g=g_name, x1=x_name, y1=y_name, input_color=inputColor, curve_color=curveColor, numPairs=num_pairs, x_values=x_values, y_values=y_values, vMax=str(round(vM_guess, 10)) + " " + y_units + units_per, kM=str(round(kM_guess, 10)) + " " + x_units)
    else:
         blank_plot = go.Figure()
         blank_plot.update_layout(
@@ -150,7 +158,7 @@ def index():
         plot_bgcolor='white',
         paper_bgcolor='white'
         )
-        return render_template('index.html', plot=blank_plot.to_html())
+        return render_template('index.html', plot=blank_plot.to_html(), g="", x1="", y1="", input_color="#0000ff", curve_color="#ff0000", numPairs=0, vMax =0.0, kM=0.0)
    
    
 
