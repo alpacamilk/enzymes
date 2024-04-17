@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,86 +7,113 @@
    <title>Enzyme Kinetics</title>
 
    <link rel="stylesheet" href="{{ url_for('static', filename='style/style.css') }}">
-   <img src="{{ url_for('static', filename='images/EnzymesLogo.PNG')}}" width="240" height="135" alt="logo">
+   <img src="{{ url_for('static', filename='images/EnzymesLogo.PNG')}}" class="logo-img" alt="logo">
 </head>
 <body>
    <form id="form" action="/" method="post">
         <h3>Graph name:</h3>
-        <input type="text" id="g" name="g" >
+        <input type="text" id="g" name="g" value="{{ g }}">
 
         <br>
         <h3>X-Axis name:</h3>
-        <input type="text" id="x1" name="x1">
+        <input type="text" id="x1" name="x1" value="{{ x1 }}">
 
         <br>
         <h3>Y-Axis name:</h3>
-        <input type="text" id="y1" name="y1"><br><br>
+        <input type="text" id="y1" name="y1" value="{{ y1 }}">
         
-        <label for="x-units">Select Unit for X:</label>
-        <select name="x-units" id="x-units">
-            <option value="firstXOption">M</option>
-            <option value="secondXOption">mM</option>
-            <option value="thirdXOption">µM</option>
-            <option value="fourthXOption">nM</option>
-        </select><br><br>
-    
-        <label for="y-units">Select Unit for Y:</label>
-        <select name="y-units" id="y-units">
-            <option value="firstYOption">A</option>
-            <option value="secondYOption">B</option>
-            <option value="thirdYOption">C</option>
-            <option value="fourthYOption">D</option>
-        </select><br><br>
 
-        <h3>Scatter Points Color:</h3>
-        <input type="color" id="input-color" name="input-color" value="#0000ff">
+        <h3>Points Color:</h3>
+        <input type="color" id="input-color" name="input-color" value="{{ input_color }}">
 
         <h3>Curve Color:</h3>
-        <input type="color" id="curve-color" name="curve-color" value="#ff0000"><br>
+        <input type="color" id="curve-color" name="curve-color" value="{{ curve_color }}">
 
-        <label for="numPairs">Enter the number of pairs:</label>
-        <input type="number" id="numPairs" name="numPairs" min="0"><br><br>
-
-        <div id="inputFields"></div>
-
+        <br><br>
+        <label for="x-units">X-Units:</label>
+        <select name="x-units" id="x-units">
+            <option value="M">M</option>
+            <option value="mM">mM</option>
+            <option value="µM">µM</option>
+            <option value="nM">nM</option>
+        </select>
     
-        <input type="submit" value="Submit">
+        <label for="y-units">Y-Units:</label>
+        <select name="y-units" id="y-units">
+            <option value="M">M</option>
+            <option value="mM">mM</option>
+            <option value="µM">µM</option>
+            <option value="nM">nM</option>
+        </select><br><br>
+
+        <label value="units">Units per:</label><br>
+        <input type="radio" id="perSecond" name="units-per" value="/s" required>
+        <label for="perSecond">/s</label>
+        <input type="radio" id="perMinute" name="units-per" value="/min" required>
+        <label for="perMinute">/min</label>
+        <input type="radio" id="perHour" name="units-per" value="/hr" required>
+        <label for="perHour">/hr</label><br><br>
+
+        <label for="numPairs">Number of pairs:</label><br><br>
+        <input type="number" id="numPairs" name="numPairs" min="0" value="{{ numPairs }}">
+
+        <div id="inputFields">        
+        {% for i in range(numPairs) %}
+            <label for="x_values">x:</label>
+            <input type="text" class="x_values" name="x_values[]" value="{{ x_values[i] }}">
+            <label for="y_values">y:</label>
+            <input type="text" class="y_values" name="y_values[]" value="{{ y_values[i] }}"><br>
+        {% endfor %}
+    </div>
+
+    <br><br>
+        <input type="submit" value="Create Graph">
    </form>
 
 
    <script>
-    document.getElementById("numPairs").addEventListener("input", function() {
-    var numPairs = parseInt(this.value);
-    var inputFields = '';
-    var maxPairs = 100;
+    document.addEventListener("DOMContentLoaded", function() {
+        // This function will be called when the page is fully loaded
+        var numPairsInput = document.getElementById("numPairs");
+        var inputFieldsContainer = document.getElementById("inputFields");
 
-    if (numPairs > maxPairs) {
-        alert(`Please enter a number less than or equal to ${maxPairs}`);
-        this.value = maxPairs;
-        numPairs = maxPairs;
-    }
+        function generateInputFields() {
+            var numPairs = parseInt(numPairsInput.value);
+            var inputFieldsHTML = '';
+            for (var i = 0; i < numPairs; i++) {
+                inputFieldsHTML += `
+                    <label for="x_values">x:</label>
+                    <input type="text" class="x_values" name="x_values[]" value="">
+                    <label for="y_values">y:</label>
+                    <input type="text" class="y_values" name="y_values[]" value=""><br>
+                `;
+            }
+            inputFieldsContainer.innerHTML = inputFieldsHTML;
+        }
 
-    for (var i = 0; i < numPairs; i++) {
-        inputFields += `
-            <label for="x_values">x:</label>
-            <input type="text" class="x_values" name="x_values[]">
-            <label for="y_values">y:</label>
-            <input type="text" class="y_values" name="y_values[]"><br>
-        `;
-    }
+        // Generate input fields when the page loads
+        generateInputFields();
 
-    document.getElementById('inputFields').innerHTML = inputFields;
-});
+        // Generate input fields when the number of pairs input changes
+        numPairsInput.addEventListener("input", generateInputFields);
+    });
    </script>
 
-
-   <div id = "values">
-    <h1>kM: {{ kM }}</h1>
-    <h1>vMax: {{ vMax }}</h1>
+   <div>
+    <h2 id="vMax">Vmax</h2>
+    <h2 id="kM">kM</h2>
+   </div>
+   <div>
+    <h2 id="kMVal">{{ kM }}</h2>
+    <h2 id="vMaxVal">{{ vMax }}</h2>
    </div>
    <div id="plot">
        {{ plot|safe }}
    </div>
+
+</body>
+</html>
+
 
 </body>
 </html>
