@@ -148,7 +148,7 @@ def index():
 
         combinedFig.update_yaxes(range=y_range)
         
-        return render_template('index.html', plot=combinedFig.to_html(), g=g_name, x1=x_name, y1=y_name, input_color=inputColor, curve_color=curveColor, numPairs=num_pairs, x_values=x_values, y_values=y_values, vMax=str(round(vM_guess, 10)) + " " + y_units + units_per, kM=str(round(kM_guess, 10)) + " " + x_units)
+        return render_template('index.html', plot=combinedFig.to_html(), g=g_name, x1=x_name, y1=y_name, input_color=inputColor, curve_color=curveColor, numPairs=num_pairs, x_values=x_values, y_values=y_values, vMax="{:.4g} {}{}".format(vM_guess, y_units, units_per), kM="{:.4g} {}{}".format(kM_guess, x_units, units_per))
    else:
         blank_plot = go.Figure()
         blank_plot.update_layout(
