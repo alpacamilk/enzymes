@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +9,7 @@
    <img src="{{ url_for('static', filename='images/EnzymesLogo.PNG')}}" class="logo-img" alt="logo">
 </head>
 <body>
-   <form id="form" action="/" method="post">
+   <form id="form" action="/" method="post" onsubmit="return storePairs()">
         <h3>Graph name:</h3>
         <input type="text" id="g" name="g" value="{{ g }}">
 
@@ -21,7 +20,7 @@
         <br>
         <h3>Y-Axis name:</h3>
         <input type="text" id="y1" name="y1" value="{{ y1 }}">
-        
+
 
         <h3>Points Color:</h3>
         <input type="color" id="input-color" name="input-color" value="{{ input_color }}">
@@ -37,7 +36,7 @@
             <option value="µM">µM</option>
             <option value="nM">nM</option>
         </select>
-    
+
         <label for="y-units">Y-Units:</label>
         <select name="y-units" id="y-units">
             <option value="M">M</option>
@@ -57,7 +56,7 @@
         <label for="numPairs">Number of pairs:</label><br><br>
         <input type="number" id="numPairs" name="numPairs" min="0" value="{{ numPairs }}">
 
-        <div id="inputFields">        
+        <div id="inputFields">
         {% for i in range(numPairs) %}
             <label for="x_values">x:</label>
             <input type="text" class="x_values" name="x_values[]" value="{{ x_values[i] }}">
@@ -83,20 +82,95 @@
             for (var i = 0; i < numPairs; i++) {
                 inputFieldsHTML += `
                     <label for="x_values">x:</label>
-                    <input type="text" class="x_values" name="x_values[]" value="">
+                    <input id="xVal${i}" type="text" class="x_values" name="x_values[]">
                     <label for="y_values">y:</label>
-                    <input type="text" class="y_values" name="y_values[]" value=""><br>
-                `;
-            }
+                    <input id="yVal${i}" type="text" class="y_values" name="y_values[]"><br>
+            `;
+        }
             inputFieldsContainer.innerHTML = inputFieldsHTML;
         }
 
         // Generate input fields when the page loads
-        generateInputFields();
+        //This function uses the value from localstorage
+        //every other time we will use the above function to check the current value
+        generateInputFieldsFromStorage();
 
+        if(localStorage.getItem('numberOfPairs') != null)
+        {
+            addPairs();
+        }
         // Generate input fields when the number of pairs input changes
         numPairsInput.addEventListener("input", generateInputFields);
     });
+   </script>
+
+   <script>
+    function addPairs()
+    {
+        //This gets the strings of each set of values and splits them into an array.
+        var numberPairs = localStorage.getItem('numberOfPairs');
+        const pairXValues = localStorage.getItem('xPairs').toString().split(',');
+        const pairYValues = localStorage.getItem('yPairs').toString().split(',');
+
+
+        //This loop then fills in the fields with the stored values from the array
+        for(var i = 0; i < numberPairs; i++)
+        {
+            document.getElementById("xVal" + i).value = pairXValues[i];
+            document.getElementById("yVal" + i).value = pairYValues[i];
+        }
+    }
+
+    function storePairs()
+    {
+
+        //this converts each of the sets of pairs into a comma-separated-string and puts it in localstorage to get on reload
+        //it also stores the number of pairs chosen
+        var numberPairs = document.getElementById("numPairs").value;
+        var xvals = "";
+        var yvals = "";
+
+        for(var i = 0; i < numberPairs; i++)
+        {
+            xvals += document.getElementById("xVal" + i).value
+            xvals += ",";
+            yvals += document.getElementById("yVal" + i).value
+            yvals += ",";
+        }
+
+        localStorage.setItem("numberOfPairs", numberPairs);
+        localStorage.setItem("xPairs", xvals);
+        localStorage.setItem("yPairs", yvals);
+    }
+
+    function generateInputFieldsFromStorage()
+    {
+
+        var numPairsInput = document.getElementById("numPairs");
+        var inputFieldsContainer = document.getElementById("inputFields");
+
+        if(localStorage.getItem('numberOfPairs') != null)
+        {
+            var numPairs = localStorage.getItem('numberOfPairs');
+            numPairsInput.value = numPairs;
+            var inputFieldsHTML = '';
+            for (var i = 0; i < numPairs; i++)
+            {
+                inputFieldsHTML += `
+                    <label for="x_values">x:</label>
+                    <input id="xVal${i}" type="text" class="x_values" name="x_values[]">
+                    <label for="y_values">y:</label>
+                    <input id="yVal${i}" type="text" class="y_values" name="y_values[]"><br>
+            `;
+            }
+
+            inputFieldsContainer.innerHTML = inputFieldsHTML;
+        }
+        if(localStorage.getItem('numberOfPairs') == null)
+        {
+            //generateInputFields();
+        }
+    }
    </script>
 
    <div>
