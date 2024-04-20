@@ -137,13 +137,43 @@ t = np.linspace(0, xMax + 0.5*xMax)
 tY = lineweaver(slope, t, b)
 
 lineFig = go.Figure(data=go.Scatter(x=t, y=tY))
-lineFig.update_layout(
+
+scatterFig = px.scatter(x=newX, y=newY)
+combinedBurk = go.Figure(data=scatterFig.data + lineFig.data)
+combinedBurk.update_layout(
     title=dict(text="Lineweaver-Burk", font=dict(size=50), yref='paper'),
     xaxis=dict(title="1 / Substrate Concentration"),
     yaxis=dict(title="1 / Velocity")
 )
 
-lineFig.show()
+combinedBurk.data[0].name = 'Input Points'
+equation = "Lineweaver-Burk"
+combinedBurk.data[1].name = equation
+
+combinedBurk.data[0].showlegend = True
+combinedBurk.data[1].showlegend = True
+combinedBurk.update_traces(marker=dict(color=inputColor), selector=dict(name="Input Points"), overwrite=True)
+combinedBurk.update_traces(marker=dict(color=curveColor), selector=dict(name=equation), overwrite=True)
+combinedBurk.show()
+
+newX = list()
+newY = list()
+
+for element in x:
+    if element != 0:
+        newX.append(1/element)
+    else:
+        newX.append(element)
+print(len(newX))
+for element in newX:
+    print(element)
+
+for element in y:
+    if element != 0:
+        newY.append(1/element)
+    else:
+        newY.append(element)
+
 
 kCat = vM_guess / enzymeConcentration
 
