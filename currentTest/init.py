@@ -13,14 +13,19 @@ app = Flask(__name__)
 def index():
    if request.method == 'POST':
         
+        # Retrieve the user input
         x_units = request.form.get('x-units')
         y_units = request.form.get('y-units')
         units_per = request.form.get('units-per')
-
-        # Retrieve the user input for graph name, x-axis name, and y-axis name
         g_name = request.form.get('g')
         x_name = request.form.get('x1')
         y_name = request.form.get('y1')
+        enzymeConcentration_str = request.form.get('e')
+        if enzymeConcentration_str:
+            enzymeConcentration = float(enzymeConcentration_str)
+        else:
+            enzymeConcentration = 0
+            kCat = 0
 
 
         # Retrieve user input for number of pairs
@@ -147,8 +152,66 @@ def index():
             y_range = [miny, maxy]
 
         combinedFig.update_yaxes(range=y_range)
+
+        ##Lineweaver burk
+        def lineweaver(slope, x, intercept):
+            return((slope * x + intercept))
+
+        #slope = Km / Vmax
+        #b = 1 / Vmax
+        slope = (kM_guess / vM_guess)
+        b = (1 / vM_guess)
+
+        xMax = x.max()
+        t = np.linspace(0, xMax + 0.5*xMax)
+        tY = lineweaver(slope, t, b)
+
+        lineFig = go.Figure(data=go.Scatter(x=t, y=tY))
+
+        scatterFig = px.scatter(x=x, y=y)
+        combinedBurk = go.Figure(data=scatterFig.data + lineFig.data)
+        combinedBurk.update_layout(
+            title=dict(text="Lineweaver-Burk", font=dict(size=50), yref='paper',  x=0.5),
+            xaxis=dict(title="1 / Substrate Concentration",gridcolor='black'),
+            yaxis=dict(title="1 / Velocity",gridcolor='black'),
+            plot_bgcolor='white',
+            paper_bgcolor='white',
+            width=775  # Adjust the width as needed
+        )
+
+        combinedBurk.data[0].name = 'Input Points'
+        equation = "Lineweaver-Burk"
+        combinedBurk.data[1].name = equation
+
+        combinedBurk.data[0].showlegend = True
+        combinedBurk.data[1].showlegend = True
+        combinedBurk.update_traces(marker=dict(color=inputColor), selector=dict(name="Input Points"), overwrite=True)
+        combinedBurk.update_traces(marker=dict(color=curveColor), selector=dict(name=equation), overwrite=True)
+
+        newX = list()
+        newY = list()
+
+        for element in x:
+            if element != 0:
+                newX.append(1/element)
+            else:
+                newX.append(element)
+        print(len(newX))
+        for element in newX:
+            print(element)
+
+        for element in y:
+            if element != 0:
+                newY.append(1/element)
+            else:
+                newY.append(element)
+
+        if enzymeConcentration is not None:
+            kCat = vM_guess / enzymeConcentration
+        else:
+            kCat = 0
         
-        return render_template('index.html', plot=combinedFig.to_html(), g=g_name, x1=x_name, y1=y_name, input_color=inputColor, curve_color=curveColor, numPairs=num_pairs, x_values=x_values, y_values=y_values, vMax="{:.4g} {}{}".format(vM_guess, y_units, units_per), kM="{:.4g} {}{}".format(kM_guess, x_units, units_per))
+        return render_template('index.html', plot2 = combinedBurk.to_html(), plot=combinedFig.to_html(), g=g_name, x1=x_name, y1=y_name, input_color=inputColor, curve_color=curveColor, numPairs=num_pairs, x_values=x_values, y_values=y_values, vMax="{:.4g} {}{}".format(vM_guess, y_units, units_per), kM="{:.4g} {}{}".format(kM_guess, x_units, units_per), kCat ="{:.4g}".format(kCat), e = enzymeConcentration)
    else:
         blank_plot = go.Figure()
         blank_plot.update_layout(
@@ -158,7 +221,7 @@ def index():
         plot_bgcolor='white',
         paper_bgcolor='white'
         )
-        return render_template('index.html', plot=blank_plot.to_html(), g="", x1="", y1="", input_color="#0000ff", curve_color="#ff0000", numPairs=0, vMax =0.0, kM=0.0)
+        return render_template('index.html', plot=blank_plot.to_html(), g="", x1="", y1="", input_color="#0000ff", curve_color="#ff0000", numPairs=0, vMax =0.0, kM=0.0,kCat=0.0)
    
    
 
