@@ -6,9 +6,10 @@
    <title>Enzyme Kinetics</title>
 
    <link rel="stylesheet" href="{{ url_for('static', filename='style/style.css') }}">
-   <img src="{{ url_for('static', filename='images/EnzymesLogo.PNG')}}" class="logo-img" alt="logo">
 </head>
 <body>
+    <img src="{{ url_for('static', filename='images/EnzymesLogo.PNG')}}" class="logo-img" alt="logo">
+
    <form id="form" action="/" method="post" onsubmit="return storePairs()">
         <h3>Graph name:</h3>
         <input type="text" id="g" name="g" value="{{ g }}">
@@ -27,6 +28,9 @@
 
         <h3>Curve Color:</h3>
         <input type="color" id="curve-color" name="curve-color" value="{{ curve_color }}">
+        
+        <h3>{E}</h3>
+        <input type="text" id="e" name="e" value="{{ e }}">
 
         <br><br>
         <label for="x-units">X-Units:</label>
@@ -67,124 +71,147 @@
 
     <br><br>
         <input type="submit" value="Create Graph">
+        <br>
+        <input type="reset" value="Reset">
    </form>
 
 
-   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // This function will be called when the page is fully loaded
-        var numPairsInput = document.getElementById("numPairs");
-        var inputFieldsContainer = document.getElementById("inputFields");
-
-        function generateInputFields() {
-            var numPairs = parseInt(numPairsInput.value);
-            var inputFieldsHTML = '';
-            for (var i = 0; i < numPairs; i++) {
-                inputFieldsHTML += `
-                    <label for="x_values">x:</label>
-                    <input id="xVal${i}" type="text" class="x_values" name="x_values[]">
-                    <label for="y_values">y:</label>
-                    <input id="yVal${i}" type="text" class="y_values" name="y_values[]"><br>
-            `;
-        }
-            inputFieldsContainer.innerHTML = inputFieldsHTML;
-        }
-
-        // Generate input fields when the page loads
-        //This function uses the value from localstorage
-        //every other time we will use the above function to check the current value
-        generateInputFieldsFromStorage();
-
-        if(localStorage.getItem('numberOfPairs') != null)
-        {
-            addPairs();
-        }
-        // Generate input fields when the number of pairs input changes
-        numPairsInput.addEventListener("input", generateInputFields);
-    });
-   </script>
-
-   <script>
-    function addPairs()
-    {
-        //This gets the strings of each set of values and splits them into an array.
-        var numberPairs = localStorage.getItem('numberOfPairs');
-        const pairXValues = localStorage.getItem('xPairs').toString().split(',');
-        const pairYValues = localStorage.getItem('yPairs').toString().split(',');
-
-
-        //This loop then fills in the fields with the stored values from the array
-        for(var i = 0; i < numberPairs; i++)
-        {
-            document.getElementById("xVal" + i).value = pairXValues[i];
-            document.getElementById("yVal" + i).value = pairYValues[i];
-        }
-    }
-
-    function storePairs()
-    {
-
-        //this converts each of the sets of pairs into a comma-separated-string and puts it in localstorage to get on reload
-        //it also stores the number of pairs chosen
-        var numberPairs = document.getElementById("numPairs").value;
-        var xvals = "";
-        var yvals = "";
-
-        for(var i = 0; i < numberPairs; i++)
-        {
-            xvals += document.getElementById("xVal" + i).value
-            xvals += ",";
-            yvals += document.getElementById("yVal" + i).value
-            yvals += ",";
-        }
-
-        localStorage.setItem("numberOfPairs", numberPairs);
-        localStorage.setItem("xPairs", xvals);
-        localStorage.setItem("yPairs", yvals);
-    }
-
-    function generateInputFieldsFromStorage()
-    {
-
-        var numPairsInput = document.getElementById("numPairs");
-        var inputFieldsContainer = document.getElementById("inputFields");
-
-        if(localStorage.getItem('numberOfPairs') != null)
-        {
-            var numPairs = localStorage.getItem('numberOfPairs');
-            numPairsInput.value = numPairs;
-            var inputFieldsHTML = '';
-            for (var i = 0; i < numPairs; i++)
-            {
-                inputFieldsHTML += `
-                    <label for="x_values">x:</label>
-                    <input id="xVal${i}" type="text" class="x_values" name="x_values[]">
-                    <label for="y_values">y:</label>
-                    <input id="yVal${i}" type="text" class="y_values" name="y_values[]"><br>
-            `;
-            }
-
-            inputFieldsContainer.innerHTML = inputFieldsHTML;
-        }
-        if(localStorage.getItem('numberOfPairs') == null)
-        {
-            //generateInputFields();
-        }
-    }
-   </script>
-
-   <div>
-    <h2 id="vMax">Vmax</h2>
-    <h2 id="kM">kM</h2>
-   </div>
-   <div>
-    <h2 id="kMVal">{{ kM }}</h2>
-    <h2 id="vMaxVal">{{ vMax }}</h2>
-   </div>
+   <table id = "values">
+    <tr>
+        <th>Parameters</th>
+        <th>Values</th>
+    </tr>
+    <tr>
+        <td>V<sub>max</sub></td>
+        <td>{{ vMax }}</td>
+    </tr>
+    <tr>
+        <td>K<sub>M</sub></td>
+        <td>{{ kM }}</td>
+    </tr>
+    <tr>
+        <td>K<sub>cat</sub></td>
+        <td>{{ kCat }}</td>
+    </tr>
    <div id="plot">
        {{ plot|safe }}
    </div>
+   <button id="lineweaver" onclick="togglePlot2()">Lineweaver-Burk</button>
+   <div id="plot2" style="display: none;">
+        {{ plot2|safe }}
+    </div>
+    <div class="blank-box"></div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // This function will be called when the page is fully loaded
+            var numPairsInput = document.getElementById("numPairs");
+            var inputFieldsContainer = document.getElementById("inputFields");
+    
+            function generateInputFields() {
+                var numPairs = parseInt(numPairsInput.value);
+                var inputFieldsHTML = '';
+                for (var i = 0; i < numPairs; i++) {
+                    inputFieldsHTML += `
+                        <label for="x_values">x:</label>
+                        <input id="xVal${i}" type="text" class="x_values" name="x_values[]">
+                        <label for="y_values">y:</label>
+                        <input id="yVal${i}" type="text" class="y_values" name="y_values[]"><br>
+                `;
+            }
+                inputFieldsContainer.innerHTML = inputFieldsHTML;
+            }
+    
+            // Generate input fields when the page loads
+            //This function uses the value from localstorage
+            //every other time we will use the above function to check the current value
+            generateInputFieldsFromStorage();
+    
+            if(localStorage.getItem('numberOfPairs') != null)
+            {
+                addPairs();
+            }
+            // Generate input fields when the number of pairs input changes
+            numPairsInput.addEventListener("input", generateInputFields);
+        });
+       </script>
+    
+       <script>
+        function addPairs()
+        {
+            //This gets the strings of each set of values and splits them into an array.
+            var numberPairs = localStorage.getItem('numberOfPairs');
+            const pairXValues = localStorage.getItem('xPairs').toString().split(',');
+            const pairYValues = localStorage.getItem('yPairs').toString().split(',');
+    
+    
+            //This loop then fills in the fields with the stored values from the array
+            for(var i = 0; i < numberPairs; i++)
+            {
+                document.getElementById("xVal" + i).value = pairXValues[i];
+                document.getElementById("yVal" + i).value = pairYValues[i];
+            }
+        }
+    
+        function storePairs()
+        {
+    
+            //this converts each of the sets of pairs into a comma-separated-string and puts it in localstorage to get on reload
+            //it also stores the number of pairs chosen
+            var numberPairs = document.getElementById("numPairs").value;
+            var xvals = "";
+            var yvals = "";
+    
+            for(var i = 0; i < numberPairs; i++)
+            {
+                xvals += document.getElementById("xVal" + i).value
+                xvals += ",";
+                yvals += document.getElementById("yVal" + i).value
+                yvals += ",";
+            }
+    
+            localStorage.setItem("numberOfPairs", numberPairs);
+            localStorage.setItem("xPairs", xvals);
+            localStorage.setItem("yPairs", yvals);
+        }
+    
+        function generateInputFieldsFromStorage()
+        {
+    
+            var numPairsInput = document.getElementById("numPairs");
+            var inputFieldsContainer = document.getElementById("inputFields");
+    
+            if(localStorage.getItem('numberOfPairs') != null)
+            {
+                var numPairs = localStorage.getItem('numberOfPairs');
+                numPairsInput.value = numPairs;
+                var inputFieldsHTML = '';
+                for (var i = 0; i < numPairs; i++)
+                {
+                    inputFieldsHTML += `
+                        <label for="x_values">x:</label>
+                        <input id="xVal${i}" type="text" class="x_values" name="x_values[]">
+                        <label for="y_values">y:</label>
+                        <input id="yVal${i}" type="text" class="y_values" name="y_values[]"><br>
+                `;
+                }
+    
+                inputFieldsContainer.innerHTML = inputFieldsHTML;
+            }
+            if(localStorage.getItem('numberOfPairs') == null)
+            {
+                //generateInputFields();
+            }
+        }
+        function togglePlot2() {
+            var plot2Div = document.getElementById("plot2");
+            if (plot2Div.style.display === "none") {
+                plot2Div.style.display = "block";
+            } else {
+                plot2Div.style.display = "none";
+            }
+        }
+       </script>
 </body>
 </html>
 
