@@ -153,7 +153,10 @@ def index():
 
         combinedFig.update_yaxes(range=y_range)
 
-
+ ##Lineweaver burk
+        def lineweaver(slope, x, intercept):
+            return((slope * x + intercept))
+        
         newX = list()
         newY = list()
 
@@ -171,10 +174,6 @@ def index():
                 newY.append(1/element)
             else:
                 newY.append(element)
-
- ##Lineweaver burk
-        def lineweaver(slope, x, intercept):
-            return((slope * x + intercept))
 
         #slope = Km / Vmax
         #b = 1 / Vmax
@@ -195,7 +194,7 @@ def index():
             yaxis=dict(title="1 / Velocity",gridcolor='black'),
             plot_bgcolor='white',
             paper_bgcolor='white',
-            width=775  # Adjust the width as needed
+            width = 775
         )
 
         combinedBurk.data[0].name = 'Input Points'
