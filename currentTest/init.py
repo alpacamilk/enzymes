@@ -187,7 +187,7 @@ def index():
 
         lineFig = go.Figure(data=go.Scatter(x=t, y=tY))
 
-        scatterFig = px.scatter(x=x, y=y)
+        scatterFig = px.scatter(x=newX, y=newY)
         combinedBurk = go.Figure(data=scatterFig.data + lineFig.data)
         combinedBurk.update_layout(
             title=dict(text="Lineweaver-Burk", font=dict(size=50), yref='paper',  x=0.5),
