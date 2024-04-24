@@ -153,7 +153,26 @@ def index():
 
         combinedFig.update_yaxes(range=y_range)
 
-        ##Lineweaver burk
+
+        newX = list()
+        newY = list()
+
+        for element in x:
+            if element != 0:
+                newX.append(1/element)
+            else:
+                newX.append(element)
+        print(len(newX))
+        for element in newX:
+            print(element)
+
+        for element in y:
+            if element != 0:
+                newY.append(1/element)
+            else:
+                newY.append(element)
+
+ ##Lineweaver burk
         def lineweaver(slope, x, intercept):
             return((slope * x + intercept))
 
@@ -188,24 +207,7 @@ def index():
         combinedBurk.update_traces(marker=dict(color=inputColor), selector=dict(name="Input Points"), overwrite=True)
         combinedBurk.update_traces(marker=dict(color=curveColor), selector=dict(name=equation), overwrite=True)
 
-        newX = list()
-        newY = list()
-
-        for element in x:
-            if element != 0:
-                newX.append(1/element)
-            else:
-                newX.append(element)
-        print(len(newX))
-        for element in newX:
-            print(element)
-
-        for element in y:
-            if element != 0:
-                newY.append(1/element)
-            else:
-                newY.append(element)
-
+      
         if enzymeConcentration is not None:
             kCat = vM_guess / enzymeConcentration
         else:
