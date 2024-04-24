@@ -211,7 +211,7 @@ def index():
         else:
             kCat = 0
         
-        return render_template('index.html', plot2 = combinedBurk.to_html(), plot=combinedFig.to_html(), g=g_name, x1=x_name, y1=y_name, input_color=inputColor, curve_color=curveColor, numPairs=num_pairs, x_values=x_values, y_values=y_values, vMax="{:.4g} {}{}".format(vM_guess, y_units, units_per), kM="{:.4g} {}{}".format(kM_guess, x_units, units_per), kCat ="{:.4g}".format(kCat), e = enzymeConcentration)
+        return render_template('index.html', plot2 = combinedBurk.to_html(), plot=combinedFig.to_html(), g=g_name, x1=x_name, y1=y_name, input_color=inputColor, curve_color=curveColor, numPairs=num_pairs, x_values=x_values, y_values=y_values, vMax="{:.4g} {}{}".format(vM_guess, y_units, units_per), kM="{:.4g} {}{}".format(kM_guess, x_units, units_per), kCat="{:.3f}".format(kCat), e = enzymeConcentration)
    else:
         blank_plot = go.Figure()
         blank_plot.update_layout(
